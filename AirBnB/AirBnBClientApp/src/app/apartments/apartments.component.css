@@ -1,0 +1,24 @@
+i{
+    float: left;
+}
+
+.jumbotron{
+    max-width: 80% !important;
+    width:80% !important;
+    margin-left: 4%;
+    border: 2px solid red;
+}
+
+.green{
+    color: green;
+}
+
+.red{
+    color: red;
+}
+
+.links{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}

@@ -1,0 +1,131 @@
+<div class="container">
+    <h2 class="text-center">{{apartment.name}}</h2>
+    <hr>
+    <div class="row">
+        <div class="container images">
+            <carousel>
+                <slide *ngFor="let photo of apartment.photos">
+                    <img [src]="photo.url" style="display: block; width: 100%;">
+                </slide>
+            </carousel>
+        </div>
+    </div>
+    <br>
+    <div class="container row">
+        <div class="border col-md-3">
+            <h4 class="text-center">Main Info</h4>
+            <hr>
+            <h4 class="bold">Status:&nbsp;<span>{{apartment.status}}</span></h4>
+            <h4 class="bold">Name:&nbsp;<span>{{apartment.name}}</span></h4>
+            <h4 class="bold">Type:&nbsp;<span>{{apartment.type}}</span></h4>
+            <h4 class="bold">Rooms:&nbsp;<span>{{apartment.rooms}}</span></h4>
+            <h4 class="bold">Guests:&nbsp;<span>{{apartment.guests}}</span></h4>
+            <h4 class="bold">Time In:&nbsp;<span>{{timeIn}}</span></h4>
+            <h4 class="bold">Time Out:&nbsp;<span>{{timeOut}}</span></h4>
+            <h4 class="bold">Price:&nbsp;<span>{{apartment.price}}$</span></h4>
+            <h4 class="bold">Host:&nbsp;<span>{{apartment.host.username}}</span></h4>
+            <br>
+            <a class="btn btn-danger btn-sm" (click)="remove(apartment.name)" *ngIf="showForHost()" >Remove</a>&nbsp;
+            <a [routerLink]="['/update',apartment.name]" *ngIf="showForHost()" class="btn btn-warning btn-sm">Update</a>
+            &nbsp;<a class="btn btn-warning btn-sm" *ngIf="showForHost()" (click)="changeStatus()" >Change Status</a>
+            <div *ngIf="authService.decodedToken !== null">
+                <a [routerLink]="['/reserve',apartment.name]" class="btn btn-primary btn-sm" *ngIf="authService.decodedToken.role == 'Guest'">Reserve</a>
+            </div>
+            <br>
+            <h4 class="text-center">Amenities</h4>
+            <hr>
+            <ul class="grid-container">
+                <li *ngFor="let item of apartment.amenities" class="btn btn-success btn-sm" (click)="false">{{item.name}}</li>
+            </ul>
+        </div>
+        <div class="border col-md-9">
+            <h4 class="text-center">Location</h4>
+            <hr>
+            <div class="col-md-8">
+                <div id="map" class="map"></div>
+            </div>
+            <div class="col-md-4">
+                <h4 class="bold">Country:&nbsp;<span>{{apartment.country}}</span></h4>
+                <h4 class="bold">City:&nbsp;<span>{{apartment.city}}</span></h4>
+                <h4 class="bold">Street:&nbsp;<span>{{apartment.street}}</span></h4>
+                <h4 class="bold">Number:&nbsp;<span>{{apartment.number}}</span></h4>
+                <h4 class="bold">Post Code:&nbsp;<span>{{apartment.postCode}}</span></h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 container border">
+        <h4 class="text-center">Dates</h4>
+        <hr>
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-center">
+                <button type="button" class="btn btn-primary" (click)="openModal(template)">Click here to check avialable dates!</button> 
+        </div>
+        
+        <div class="col-md-4"></div>
+        <ng-template #template>
+            <div class="modal-header">
+                <h4 class="modal-title pull-left">Dates</h4>
+                <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="grid-container" >
+                    <div *ngFor="let date of dates" class="btn btn-danger btn-sm" (click)="false">{{date}}</div>
+                </div>
+            </div>
+        </ng-template>
+    </div>
+    <div class="col-md-12 container border">
+        <h4 class="text-center">Comments</h4>
+        <hr>
+        <div class="jumbotron">
+            <div *ngIf="showForHostAndAdmin()">
+                <div *ngFor="let com of apartment.comments">
+                    <div class="inside">
+                        <button class="btn btn-primary" (click)="false">
+                                <i class="fa fa-user"></i>
+                                {{com.guest}}
+                                <span class="badge">{{com.rating}}</span>
+                        </button>
+                        <textarea class="form-control" readonly="true" [value]="com.text"></textarea>
+                        <div *ngIf="showForHostAndAdmin()">
+                            <h4>Status:
+                                <span class="green" *ngIf="com.status ==='Accepted'">{{com.status}}</span>
+                                <span class="red" *ngIf="com.status !=='Accepted'">{{com.status}}</span>
+                            </h4>
+                            <button type="button" (click)="changeComStatus(com.id)" class="btn btn-warning btn-sm">Change Status</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showForHostAndAdmin()===false">
+                <div *ngFor="let com of apartment.comments">
+                    <div class="inside" *ngIf="com.status === 'Accepted'">
+                        <button class="btn btn-primary" (click)="false">
+                                <i class="fa fa-user"></i>
+                                {{com.guest}}
+                                <span class="badge">{{com.rating}}</span>
+                        </button>
+                        <textarea class="form-control" readonly="true" [value]="com.text"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="jumbotron" *ngIf="showForGuest()">
+            <input type="text" [(ngModel)]="commentText" placeholder="Comment" class="form-control">
+            <br>
+            <label>Rating:</label>&nbsp;
+            <rating [(ngModel)]="rate" [max]="max" [readonly]="isReadonly"
+                    (onHover)="hoveringOver($event)" (onLeave)="resetStar()"
+                    [titles]="['one','two','three']"></rating>
+            <span class="label"
+                [ngClass]="{'label-warning': percent<30, 'label-info': percent>=30 && percent<70, 'label-success': percent>=70}"
+                [ngStyle]="{display: (overStar && !isReadonly) ? 'inline' : 'none'}">{{percent}}%</span>
+            <br>
+            <button class="btn btn-success btn-sm" (click)="addComment()">Add Comment</button>
+        </div>
+    </div>
+    
+</div>
+

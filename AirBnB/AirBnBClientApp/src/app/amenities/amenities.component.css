@@ -1,0 +1,12 @@
+.btn-danger{
+    margin-top: 5px;
+    margin-bottom: 5px; 
+}
+.col-md-9{
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-danger i{
+    float: left;
+}

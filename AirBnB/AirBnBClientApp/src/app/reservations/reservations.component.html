@@ -1,0 +1,90 @@
+<div class="container">
+    <h1 class="text-center">Reservations</h1>
+    <hr>
+    <div class="col-md-3">
+        <div>
+            <h2 class="text-center">Sort</h2>
+            <hr>
+            <form [formGroup]="sortForm" id="sortForm">
+                    <div class="form-group" >
+                        <label class="control-label" style="margin-right: 10px">Price: </label>
+                        <br>&nbsp;&nbsp;
+                        <label class="radio-inline">
+                            <input (change)="sort()" type="radio" value="Low" formControlName="criteria">Low to High
+                        </label>
+                        <br>&nbsp;&nbsp;
+                        <label class="radio-inline">
+                            <input (change)="sort()" type="radio" value="High" formControlName="criteria">High to Low
+                        </label>
+                    </div>
+                    <div>
+                        <button class="btn btn-danger btn-sm" (click)="load()">Reset</button>
+                    </div>
+            </form>
+        </div>
+        <div *ngIf="authService.decodedToken.role == 'Host' || authService.decodedToken.role == 'Admin'">
+            <h2 class="text-center">Filter</h2>
+            <hr>
+            <form [formGroup]="filterForm" id="filterForm">
+                <div class="form-group" >
+                    <label class="control-label" style="margin-right: 10px">Status: </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="filterStatus()" type="radio" value="Created" formControlName="status">Created
+                    </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="filterStatus()" type="radio" value="Accepted" formControlName="status">Accepted
+                    </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="filterStatus()" type="radio" value="Denied" formControlName="status">Denied
+                    </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="filterStatus()" type="radio" value="Quited" formControlName="status">Quited
+                    </label>
+                </div>
+                <div>
+                    <button class="btn btn-danger btn-sm" (click)="load()">Reset</button>
+                </div>
+            </form>
+        </div>
+        <div *ngIf="authService.decodedToken.role == 'Host' || authService.decodedToken.role == 'Admin'">
+            <h2 class="text-center">Search</h2>
+            <hr>
+            <form [formGroup]="searchForm" id="searchForm">
+                <div class="form-group">
+                    <input type="text" (keyup)="search()" (keydown.backspace)="search()" formControlName="user" class="form-control" placeholder="Username"/>
+                </div>
+                <button type="button" (click)="load()" class="btn btn-danger">Reset</button>
+            </form>
+        </div>
+        
+    </div>
+    <div class="col-md-9">
+        <div class="jumbotron" *ngFor="let res of reservations">
+            <h4>Apartment: {{res.apartment}}</h4>
+            <h4>Host: {{res.host}}</h4>
+            <h4>Guest: {{res.guest}}</h4>
+            <h4>Start Date: {{res.date}}</h4>
+            <h4>Number of Days: {{res.number}}</h4>
+            <h4 *ngIf="authService.decodedToken.role === 'Admin' || authService.decodedToken.role === 'Host'">
+                Status: <span class="goldText">{{res.status}}</span></h4>
+            <h4>Total Price: {{res.totalPrice}}&nbsp;$</h4>
+            
+            <hr>
+            <div *ngIf="authService.decodedToken !== null">
+                <div *ngIf="authService.decodedToken.role === 'Host'">
+                    <button type="button" [disabled]="res.status !=='Accepted'" (click)="finish(res.id)" class="btn btn-success btn-xs">Finish</button>
+                    &nbsp;<button type="button" [disabled]="res.status !=='Created'" (click)="accept(res.id)" class="btn btn-success btn-xs">Accept</button>
+                    &nbsp;<button type="button" [disabled]="res.status !=='Accepted' && res.status !=='Created' " (click)="denie(res.id)" class="btn btn-danger btn-xs">Denie</button>
+                    <br><br><small *ngIf="res.status ==='Denied' || res.status ==='Quited' " class="alert alert-info">*** Denied & Quitet: You have to update apartment dates manually!</small>
+                </div>
+                <div *ngIf="authService.decodedToken.role === 'Guest'">
+                    <button type="button" (click)="quit(res.id)" [disabled]="res.status !=='Accepted' && res.status !=='Created' " class="btn btn-danger btn-xs">Quit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,132 @@
+<div class="container">
+    <h1 class="text-center">Apartments</h1>
+    <hr>
+    <div class="col-md-3">
+        <div>
+            <h2 class="text-center">Sort</h2>
+            <hr>
+            <form [formGroup]="sortForm" id="sortForm">
+                <div class="form-group" >
+                    <label class="control-label" style="margin-right: 10px">Price: </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="sort()" type="radio" value="Low" formControlName="criteria">Low to High
+                    </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="sort()" type="radio" value="High" formControlName="criteria">High to Low
+                    </label>
+                </div>
+                <div>
+                    <button class="btn btn-danger btn-sm" (click)="reset()">Reset</button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <h2 class="text-center">Search</h2>
+            <hr>
+            <form [formGroup]="searchForm" id="searchForm" (ngSubmit)="search()">
+                <div class="form-group">
+                    <input 
+                        class="form-control" 
+                        placeholder="Dates" 
+                        #drp="bsDaterangepicker" 
+                        [bsConfig]="{ rangeInputFormat: 'DD/MM/YYYY' }" 
+                        bsDaterangepicker 
+                        formControlName="dates">
+                </div>
+                <div class="form-group" >
+                    <label class="control-label" style="margin-right: 10px">Price: </label>
+                    <ng5-slider [(value)]="priceMinValue" [(highValue)]="priceMaxValue" [options]="priceOptions"></ng5-slider>
+                </div>
+                <div class="form-group" >
+                    <label class="control-label" style="margin-right: 10px">Rooms Up To: </label>
+                    <ng5-slider [(value)]="roomsValue"  [options]="roomsOptions"></ng5-slider>
+                </div>
+                <div class="form-group" >
+                    <label class="control-label" style="margin-right: 10px">Guests Up To: </label>
+                    <ng5-slider [(value)]="guestsValue" [options]="guestsOptions"></ng5-slider>
+                </div>
+                <div class="form-group">
+                        <ng-select
+                        [items]="allcountries"
+                        [multiple]="false"
+                        [closeOnSelect]="false"
+                        [searchable]="true"
+                        bindLabel="name"
+                        placeholder="Country"
+                        formControlName="country">
+                        </ng-select>
+                </div>
+                <div class="form-group">
+                        <ng-select
+                        [items]="allcities"
+                        [multiple]="false"
+                        [closeOnSelect]="false"
+                        [searchable]="true"
+                        bindLabel="name"
+                        placeholder="City"
+                        formControlName="city">
+                        </ng-select>
+                </div>
+
+                <div>
+                    <button class="btn btn-danger btn-sm" (click)="reset()">Reset</button>&nbsp;
+                    <button class="btn btn-success btn-sm" type="submit">Search</button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <h2 class="text-center">Filter</h2>
+            <hr>
+            <form [formGroup]="filterForm" id="filterForm">
+                <div class="form-group" >
+                    <label class="control-label" style="margin-right: 10px">Type: </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="filterType()" type="radio" value="Room" formControlName="criteria">Room
+                    </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="filterType()" type="radio" value="Whole" formControlName="criteria">Whole
+                    </label>
+                </div>
+                <div *ngIf = "show()"  class="form-group" >
+                    <label class="control-label" style="margin-right: 10px">Status: </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="filterStatus()" type="radio" value="Active" formControlName="status">Active
+                    </label>
+                    <br>&nbsp;&nbsp;
+                    <label class="radio-inline">
+                        <input (change)="filterStatus()" type="radio" value="InActive" formControlName="status">InActive
+                    </label>
+                </div>
+                <div>
+                    <button class="btn btn-danger btn-sm" (click)="reset()">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-9" >
+        <div class="jumbotron" *ngFor="let apm of apartments">
+            <carousel class="images">
+                <slide *ngFor="let photo of apm.photos">
+                    <img [src]="photo.url" style="display: block; width: 100%;">
+                </slide>
+            </carousel>
+            <h4>{{apm.name}}</h4>
+            <h4>{{apm.country}},&nbsp;{{apm.city}}</h4>
+            <h4>Price:&nbsp;{{apm.price}} $</h4>
+            <h4 *ngIf="show()" >Status:&nbsp;<span [ngStyle]="{'color':apm.status === 'Active' ? 'green' : 'red' }">{{apm.status}}</span></h4>
+            <a [routerLink]="['/apartment',apm.name]" class="btn btn-success btn-sm">View More</a>
+            <hr>
+            <div *ngIf="authService.decodedToken !== null" class="links">
+                &nbsp;<a [routerLink]="['/update',apm.name]" *ngIf="authService.decodedToken.role == 'Host'" class="btn btn-warning btn-sm">Update</a>
+                &nbsp;<a class="btn btn-warning btn-sm" *ngIf="authService.decodedToken.role == 'Host'" (click)="changeStatus(apm.name)" >Change Status</a>
+                &nbsp;<a class="btn btn-danger btn-sm" (click)="remove(apm.name)" *ngIf="authService.decodedToken.role == 'Host'" >Remove</a>
+                &nbsp;<a [routerLink]="['/reserve',apm.name]" class="btn btn-primary btn-sm" *ngIf="authService.decodedToken.role == 'Guest'">Reserve</a>
+            </div>
+        </div>
+    </div>
+</div>

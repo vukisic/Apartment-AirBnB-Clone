@@ -1,0 +1,13 @@
+.jumbotron{
+    max-width: 80% !important;
+    width:80% !important;
+    margin-left: 4%;
+    border: 2px solid red;
+    background-color: #E7E5E5 !important;
+    color: #1C6E8C !important;
+}
+
+.goldText{
+    color:#031927;
+    font-size: 20px;
+}

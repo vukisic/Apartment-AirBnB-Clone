@@ -1,0 +1,67 @@
+<div class="container">
+    <h1 class="text-center">Update Apartment</h1>
+    <hr>
+    <h6 class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i>&nbsp; UnSaved changes will not take an effect!</h6>
+    <br>
+    <form [formGroup]="form" (ngSubmit)="update()" id="form" >
+        <div class="form-group" >
+            <label class="control-label" style="margin-right: 10px">Type </label>
+            <label class="radio-inline">
+            <input type="radio" value="Whole" formControlName="type">Whole
+            </label>
+            <label class="radio-inline">
+            <input type="radio" value="Room" formControlName="type">Room
+            </label>
+        </div>
+        <div class="form-group" >
+            <input type="number" step="0.5" formControlName="price" class="form-control"  placeholder="Price $$$" [ngClass]="{'blockError':form.get('price').errors && form.get('price').touched}">
+            <span class="blockErrorText" *ngIf="form.get('price').hasError('required') && form.get('price').touched">Price is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="number" step="1" formControlName="rooms" class="form-control"  placeholder="Rooms" [ngClass]="{'blockError':form.get('rooms').errors && form.get('rooms').touched}">
+            <span class="blockErrorText" *ngIf="form.get('rooms').hasError('required') && form.get('rooms').touched">Rooms is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="number" step="1" formControlName="guests" class="form-control"  placeholder="Guests" [ngClass]="{'blockError':form.get('guests').errors && form.get('guests').touched}">
+            <span class="blockErrorText" *ngIf="form.get('guests').hasError('required') && form.get('guests').touched">Guests is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="time" atp-time-picker theme="dark" formControlName="timeIn" class="form-control"  placeholder="Time In" [ngClass]="{'blockError':form.get('timeIn').errors && form.get('timeIn').touched}">
+            <span class="blockErrorText" *ngIf="form.get('timeIn').hasError('required') && form.get('timeIn').touched">Time In is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="time" atp-time-picker theme="dark" formControlName="timeOut" class="form-control"  placeholder="Time Out" [ngClass]="{'blockError':form.get('timeOut').errors && form.get('timeOut').touched}">
+            <span class="blockErrorText" *ngIf="form.get('timeOut').hasError('required') && form.get('timeOut').touched">Time Out is required!</span>
+        </div>
+        <br>
+        <div class="form-group">
+             <input 
+                class="form-control" 
+                placeholder="Dates" 
+                #drp="bsDaterangepicker" 
+                [bsConfig]="{ rangeInputFormat: 'DD/MM/YYYY' }" 
+                bsDaterangepicker 
+                formControlName="dates"
+                [ngClass]="{'blockError':form.get('dates').errors && form.get('dates').touched}">
+             <span class="blockErrorText" *ngIf="form.get('dates').hasError('required') && form.get('dates').touched">Dates is required!</span>
+        </div>
+        <div class="form-group">
+                <ng-select
+                [items]="items"
+                [multiple]="true"
+                [closeOnSelect]="false"
+                [searchable]="true"
+                bindLabel="name"
+                placeholder="Select items"
+                formControlName="amenities"
+                [ngClass]="{'blockError':form.get('amenities').errors && form.get('amenities').touched}"
+                >
+                </ng-select>
+                <span class="blockErrorText" *ngIf="form.get('amenities').hasError('required') && form.get('amenities').touched">Amenities is required!</span>
+        </div>
+        <div class="form-group text-center">        
+            <button class="btn btn-success" [disabled]="!form.valid"  type="submit">Update Apartment</button>
+        </div>
+        
+    </form>
+</div>

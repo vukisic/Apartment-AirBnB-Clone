@@ -1,0 +1,46 @@
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" [routerLink]="['home']"><img class="img" src="../../assets/icon.png"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse">
+      <ul class="nav navbar-nav" *ngIf="loggedIn()" >
+        <li routerLinkActive="active"><a [routerLink]="['apartments']" >Apartments</a></li>
+        <li routerLinkActive="active" *ngIf="authService.decodedToken?.role == 'Host'"><a [routerLink]="['newapartment']"> Add New </a></li>
+        <li routerLinkActive="active"><a [routerLink]="['reservations']">Reservations</a></li>
+        <li routerLinkActive="active" *ngIf="authService.decodedToken?.role == 'Admin'" ><a [routerLink]="['amenities']">Amenities</a></li>
+        <li routerLinkActive="active" *ngIf="authService.decodedToken?.role == 'Admin'" ><a [routerLink]="['users']" >Users</a></li>
+      </ul>
+
+      <ul class="nav navbar-nav" *ngIf="!loggedIn()" >
+        <li routerLinkActive="active" ><a [routerLink]="['apartments']" >Apartments</a></li>
+      </ul>
+
+      <form *ngIf="!loggedIn()" #logInForm="ngForm" class="navbar-form navbar-right" (ngSubmit)="login()">
+        <div class="form-group">
+          <input type="text" placeholder="Username" class="form-control" name="username" required [(ngModel)]="model.username" >
+        </div>
+        <span>&nbsp;</span>
+        <div class="form-group">
+          <input type="password" placeholder="Password" class="form-control" name="password" required [(ngModel)]="model.password">
+        </div>
+        <span>&nbsp;</span>
+        <button type="submit" [disabled]="logInForm.invalid" (keydown.enter)="login()" class="btn btn-success">Sign in</button>&nbsp;&nbsp;&nbsp;
+        <a [routerLink]="['registration']">Not a member?</a>
+      </form>
+
+      <ul *ngIf="loggedIn()" class="nav navbar-nav navbar-right">
+        <li><a class="link" (click)="false">Welcome, {{ authService.decodedToken?.unique_name | titlecase}}</a></li>
+        <li><a [routerLink]="['editProfile']" >Profile</a></li>
+        <li><a class="link" (click)="logout()" >LogOut</a></li>
+      </ul>
+
+    </div>
+  </div>
+</nav>

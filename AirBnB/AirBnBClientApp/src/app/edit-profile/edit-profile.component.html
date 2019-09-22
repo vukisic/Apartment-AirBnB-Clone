@@ -1,0 +1,43 @@
+<div class="container" >
+    <form [formGroup]="editForm" (ngSubmit)="edit()" id="editForm" class="mr-auto" >
+            <h2 class="text-center text-primary">Edit Profile</h2>
+            <hr>
+            <h6 class="alert alert-danger"><i class="fa fa-exclamation-triangle"></i>&nbsp; UnSaved changes will not take an effect!</h6>
+            <div class="form-group" >
+              <label class="control-label" style="margin-right: 10px">I am a: </label>
+              <label class="radio-inline">
+                <input type="radio" value="male" formControlName="gender">Male
+              </label>
+              <label class="radio-inline">
+                <input type="radio" value="female" formControlName="gender">Female
+              </label>
+            </div>
+
+            <div class="form-group" >
+              <input type="text" formControlName="firstName" class="form-control"  placeholder="First Name" [ngClass]="{'blockError':editForm.get('firstName').errors && editForm.get('firstName').touched}">
+              <span class="blockErrorText" *ngIf="editForm.get('firstName').hasError('required') && editForm.get('firstName').touched">First Name is required!</span>
+            </div>
+            <div class="form-group" >
+              <input type="text" formControlName="lastName" class="form-control"  placeholder="Lirst Name" [ngClass]="{'blockError':editForm.get('lastName').errors && editForm.get('lastName').touched}">
+              <span class="blockErrorText" *ngIf="editForm.get('lastName').hasError('required') && editForm.get('lastName').touched">Last Name is required!</span>
+            </div>
+            <p class="blockErrorText">* If you want to change password, otherwise leave it empty! *</p>
+            <div class="form-group">
+              <input type="password" formControlName="password" class="form-control" placeholder="Password" [ngClass]="{'blockError':editForm.get('password').errors && editForm.get('password').touched}" >
+              <span class="blockErrorText" *ngIf="editForm.get('password').hasError('required') && editForm.get('password').touched">Password is required!</span>
+              <span class="blockErrorText" *ngIf="editForm.get('password').hasError('minlength') && editForm.get('password').touched">Password is too short!</span>
+              <span class="blockErrorText" *ngIf="editForm.get('password').hasError('maxlength') && editForm.get('password').touched">password is too long!</span>
+            </div>
+            <div class="form-group">
+              <input type="password" formControlName="confirmPassword" class="form-control" placeholder="Confirm Password" [ngClass]="{'blockError':editForm.get('confirmPassword').errors 
+              && editForm.get('confirmPassword').touched || editForm.get('confirmPassword').touched && editForm.hasError('missmatch') }">
+              <span class="blockErrorText" *ngIf="editForm.get('confirmPassword').hasError('required') && editForm.get('confirmPassword').touched">Confirm Password is required!</span><br>
+              <span class="blockErrorText" *ngIf="editForm.get('confirmPassword').touched && editForm.hasError('missmatch')">Passwords does't match!</span>
+            </div>
+        
+            <div class="form-group text-center">        
+              <button class="btn btn-success" [disabled]="!editForm.valid" type="submit">Edit</button>
+            </div>
+          </form>
+        
+</div>

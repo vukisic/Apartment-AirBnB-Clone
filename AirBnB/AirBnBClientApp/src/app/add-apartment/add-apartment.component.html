@@ -1,0 +1,147 @@
+<div class="container">
+    <h1 class="text-center">Add New Apartment</h1>
+    <hr>
+    <form [formGroup]="form" (ngSubmit)="add()" id="form" >
+        <div class="form-group" >
+            <input type="text" formControlName="name" class="form-control"  placeholder="Name" [ngClass]="{'blockError':form.get('name').errors && form.get('name').touched}">
+            <span class="blockErrorText" *ngIf="form.get('name').hasError('required') && form.get('name').touched">Name is required!</span>
+        </div>
+        <div class="form-group" >
+            <label class="control-label" style="margin-right: 10px">Type </label>
+            <label class="radio-inline">
+            <input type="radio" value="Whole" formControlName="type">Whole
+            </label>
+            <label class="radio-inline">
+            <input type="radio" value="Room" formControlName="type">Room
+            </label>
+        </div>
+        <div class="form-group" >
+            <input type="number" step="0.5" formControlName="price" class="form-control"  placeholder="Price $$$" [ngClass]="{'blockError':form.get('price').errors && form.get('price').touched}">
+            <span class="blockErrorText" *ngIf="form.get('price').hasError('required') && form.get('price').touched">Price is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="number" step="1" formControlName="rooms" class="form-control"  placeholder="Rooms" [ngClass]="{'blockError':form.get('rooms').errors && form.get('rooms').touched}">
+            <span class="blockErrorText" *ngIf="form.get('rooms').hasError('required') && form.get('rooms').touched">Rooms is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="number" step="1" formControlName="guests" class="form-control"  placeholder="Guests" [ngClass]="{'blockError':form.get('guests').errors && form.get('guests').touched}">
+            <span class="blockErrorText" *ngIf="form.get('guests').hasError('required') && form.get('guests').touched">Guests is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="time" atp-time-picker theme="dark" formControlName="timeIn" class="form-control"  placeholder="Time In" [ngClass]="{'blockError':form.get('timeIn').errors && form.get('timeIn').touched}">
+            <span class="blockErrorText" *ngIf="form.get('timeIn').hasError('required') && form.get('timeIn').touched">Time In is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="time" atp-time-picker theme="dark" formControlName="timeOut" class="form-control"  placeholder="Time Out" [ngClass]="{'blockError':form.get('timeOut').errors && form.get('timeOut').touched}">
+            <span class="blockErrorText" *ngIf="form.get('timeOut').hasError('required') && form.get('timeOut').touched">Time Out is required!</span>
+        </div>
+        <div id="map" class="map"></div>
+        <br>
+        <div class="form-group" >
+            <input type="text" formControlName="country" class="form-control"  placeholder="Country" [ngClass]="{'blockError':form.get('country').errors && form.get('country').touched }" readonly="true">
+            <span class="blockErrorText" *ngIf="form.get('country').hasError('required') && form.get('country').touched">Country is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="text" formControlName="city" class="form-control"  placeholder="City" [ngClass]="{'blockError':form.get('city').errors && form.get('city').touched}" readonly="true">
+            <span class="blockErrorText" *ngIf="form.get('city').hasError('required') && form.get('city').touched">City is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="text" formControlName="street" class="form-control"  placeholder="Street" [ngClass]="{'blockError':form.get('street').errors && form.get('street').touched}" readonly="true">
+            <span class="blockErrorText" *ngIf="form.get('street').hasError('required') && form.get('street').touched">Street is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="text" formControlName="number" class="form-control"  placeholder="Number" [ngClass]="{'blockError':form.get('number').errors && form.get('number').touched}" readonly="true">
+            <span class="blockErrorText" *ngIf="form.get('number').hasError('required') && form.get('number').touched">Number is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="text" formControlName="postCode" class="form-control"  placeholder="Post Code" [ngClass]="{'blockError':form.get('postCode').errors && form.get('postCode').touched}" readonly="true">
+            <span class="blockErrorText" *ngIf="form.get('postCode').hasError('required') && form.get('postCode').touched">Post Code is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="number" step="0.0000000000000001" formControlName="lon" class="form-control"  placeholder="Lon" [ngClass]="{'blockError':form.get('lon').errors} && form.get('lon').touched" readonly="true">
+            <span class="blockErrorText" *ngIf="form.get('lon').hasError('required') && form.get('lon').touched">Lon is required!</span>
+        </div>
+        <div class="form-group" >
+            <input type="number" step="0.0000000000000001" formControlName="lat" class="form-control"  placeholder="Lat" [ngClass]="{'blockError':form.get('lat').errors && form.get('lat').touched}" readonly="true">
+            <span class="blockErrorText" *ngIf="form.get('lat').hasError('required') && form.get('lat').touched">Lat is required!</span>
+        </div>
+        <div class="form-group">
+             <input class="form-control" placeholder="Dates" #drp="bsDaterangepicker" [bsConfig]="{ rangeInputFormat: 'DD/MM/YYYY' }" bsDaterangepicker formControlName="dates" [ngClass]="{'blockError':form.get('dates').errors && form.get('dates').touched}">
+             <span class="blockErrorText" *ngIf="form.get('dates').hasError('required') && form.get('dates').touched">Dates is required!</span>
+        </div>
+
+        <div class="row">
+ 
+            <div class="col-md-3">
+            
+                <h3>Select Photos</h3>
+            
+                <div ng2FileDrop
+                        [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+                        (fileOver)="fileOverBase($event)"
+                        [uploader]="uploader"
+                        class="well my-drop-zone">
+                    Drop Photos Here!
+                </div>
+                <input type="file" formControlName="photos" ng2FileSelect [uploader]="uploader" multiple  /><br/>
+            </div>
+            <h4>Status:{{status}}</h4>
+            <div class="col-md-9" style="margin-bottom: 40px" *ngIf="uploader?.queue?.length">
+                
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th width="50%">Name</th>
+                        <th>Size</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let item of uploader.queue">
+                        <td><strong>{{ item?.file?.name }}</strong></td>
+                        <td *ngIf="uploader.isFile" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div>
+                    <div>
+              Queue progress:
+              <div class="progress">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+              </div>
+          </div>
+          <button type="button" class="btn btn-success btn-s"
+                  (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
+              <span class="glyphicon glyphicon-upload"></span> Upload
+          </button>
+          <button type="button" class="btn btn-warning btn-s"
+                  (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
+              <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+          </button>
+                    <button type="button" class="btn btn-danger btn-s"
+                            (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
+                        <span class="glyphicon glyphicon-trash"></span> Remove
+                    </button>
+                </div>
+            
+            </div>
+        </div>
+        <div class="form-group">
+                <ng-select
+                [items]="items"
+                [multiple]="true"
+                [closeOnSelect]="false"
+                [searchable]="true"
+                bindLabel="name"
+                placeholder="Select items"
+                formControlName="amenities"
+                [ngClass]="{'blockError':form.get('amenities').errors && form.get('amenities').touched}"
+                >
+                </ng-select>
+                <span class="blockErrorText" *ngIf="form.get('amenities').hasError('required') && form.get('amenities').touched">Amenities is required!</span>
+        </div>
+        <div class="form-group text-center">        
+            <button class="btn btn-success" [disabled]="!formValid()"  type="submit">Add Apartment</button>
+        </div>
+        
+    </form>
+</div>

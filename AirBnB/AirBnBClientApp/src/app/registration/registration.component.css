@@ -1,0 +1,13 @@
+.blockError{
+    border: 5px solid red !important;
+}
+
+.blockErrorText{
+    color:red;
+}
+
+#regForm{
+    width:50%;
+    margin-left: auto;
+    margin-right: auto;
+}

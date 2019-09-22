@@ -1,0 +1,19 @@
+.dropdown-menu li{
+    cursor: pointer;
+}
+
+.dropdown-toggle{
+    cursor: pointer;
+}
+
+.ph{
+    margin-top: 5px;
+}
+
+img{
+    margin-top: -15px;
+}
+
+.link{
+    cursor: pointer;
+}
