@@ -23,8 +23,7 @@ Layered architecture is the most common architecture pattern.
 Each layer of the layered architecture pattern has a specific role and responsibility within the application.
 One of the powerful features of the layered architecture pattern is the separation of concerns among components. Components within a specific layer deal only with logic that pertains to that layer...
 
-[[https://github.com/vukisic/Apartment-AirBnB-Clone/blob/master/Diagrap.png|alt=diagram]]
-![Diagram](https://raw.githubusercontent.com/vukisic/Apartment-AirBnB-Clone/master/Diagram.png?token=AGFOZAEG6PIQLCAKPE66GKS5Q7DZI)
+![Diagram](https://github.com/vukisic/Apartment-AirBnB-Clone/blob/master/Diagram.png)
 
 # Tehnologies
 ## Frontend
